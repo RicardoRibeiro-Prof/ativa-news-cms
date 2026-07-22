@@ -5,6 +5,7 @@ const panel = document.getElementById('searchPanel');
 const input = document.getElementById('newsSearch');
 const bottomAd = document.getElementById('bottomAd');
 document.querySelector('a[href="admin/login.html"]')?.remove();
+
 const FALLBACK_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"><rect width="800" height="450" fill="#ececea"/><text x="400" y="225" text-anchor="middle" font-family="Arial" font-size="32" font-weight="700" fill="#777">PORTAL SERRA ATUAL</text><text x="400" y="265" text-anchor="middle" font-family="Arial" font-size="19" fill="#888">Imagem indisponível</text></svg>`);
 
 function safe(value = '') {
@@ -69,6 +70,15 @@ function renderBreaking(items) {
   if (bar) bar.textContent = breaking.title;
 }
 
+function normalizeCampaign(item) {
+  return {
+    ...item,
+    target_url: item.target_url || item.link_url || null,
+    starts_at: item.starts_at || item.start_date || null,
+    ends_at: item.ends_at || item.end_date || null,
+  };
+}
+
 function campaignIsValid(item) {
   const now = Date.now();
   const starts = item.starts_at ? new Date(item.starts_at).getTime() : null;
@@ -86,10 +96,19 @@ function renderTopCampaign(item) {
 }
 
 async function loadCampaigns() {
-  const { data, error } = await supabase.from('ad_campaigns').select('id,name,position,status,desktop_image_url,mobile_image_url,target_url,starts_at,ends_at').eq('status', 'active').order('created_at', { ascending: false });
-  if (error) { console.warn('Campanhas não carregadas:', error.message); return; }
-  const campaigns = (data || []).filter(campaignIsValid);
-  const top = campaigns.find((item) => item.position === 'top_banner' || item.position === 'Banner superior 970 × 250');
+  const { data, error } = await supabase
+    .from('ad_campaigns')
+    .select('*')
+    .eq('status', 'active')
+    .order('created_at', { ascending: false });
+
+  if (error) {
+    console.warn('Campanhas não carregadas:', error.message);
+    return;
+  }
+
+  const campaigns = (data || []).map(normalizeCampaign).filter(campaignIsValid);
+  const top = campaigns.find((item) => ['top_banner', 'Banner superior 970 × 250', 'Banner superior 970 x 250'].includes(item.position));
   if (top) renderTopCampaign(top);
   applyImageFallbacks();
 }
