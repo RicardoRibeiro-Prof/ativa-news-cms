@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Anunciantes | Portal Serra Atual</title>
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body data-entity="advertisers">
+  <div class="admin-shell">
+    <aside class="sidebar">
+      <h2>Serra Atual</h2>
+      <nav aria-label="Menu administrativo">
+        <a href="./dashboard.html">Dashboard</a>
+        <a href="./noticias.html">Notícias</a>
+        <a href="./categorias.html">Categorias</a>
+        <a href="./campanhas.html">Campanhas</a>
+        <a class="active" href="./anunciantes.html">Anunciantes</a>
+        <a href="../index.html">Ver portal</a>
+      </nav>
+    </aside>
+    <main class="admin-main">
+      <header class="admin-header"><div><h1>Anunciantes</h1><p>Cadastre as empresas parceiras do portal.</p></div></header>
+      <section class="panel" style="padding:22px">
+        <form id="entityForm" class="entity-form">
+          <div class="form-group"><label for="name">Empresa</label><input id="name" required placeholder="Nome da empresa"></div>
+          <div class="form-group"><label for="phone">Telefone</label><input id="phone" placeholder="(89) 99999-9999"></div>
+          <div class="form-group"><label for="email">E-mail</label><input id="email" type="email" placeholder="contato@empresa.com"></div>
+          <button class="primary-button" style="width:auto" type="submit">Adicionar anunciante</button>
+          <p id="entityMessage" class="form-message"></p>
+        </form>
+      </section>
+      <section class="panel"><div class="panel-header"><h2>Anunciantes cadastrados</h2></div><div class="table-wrap"><table><thead><tr><th>Empresa</th><th>Telefone</th><th>E-mail</th><th>Ações</th></tr></thead><tbody id="entityBody"><tr><td colspan="4" class="empty-state">Carregando...</td></tr></tbody></table></div></section>
+    </main>
+  </div>
+  <script type="module" src="../assets/js/entities-admin.js"></script>
+</body>
+</html>
