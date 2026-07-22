@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d0f12">
+  <title>Dashboard | Portal Serra Atual</title>
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body>
+  <div class="admin-shell">
+    <aside class="sidebar">
+      <h2>Serra Atual</h2>
+      <nav aria-label="Menu administrativo">
+        <a class="active" href="./dashboard.html">Dashboard</a>
+        <a href="./noticias.html">Notícias</a>
+        <a href="./categorias.html">Categorias</a>
+        <a href="./campanhas.html">Campanhas</a>
+        <a href="./anunciantes.html">Anunciantes</a>
+        <button id="logoutButton" type="button">Sair</button>
+      </nav>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div>
+          <h1>Dashboard</h1>
+          <p>Conectado como <strong id="userEmail">Carregando...</strong></p>
+        </div>
+        <a class="primary-button" style="width:auto;text-decoration:none;display:inline-block" href="./noticia-form.html">Nova notícia</a>
+      </header>
+
+      <section class="stats-grid" aria-label="Resumo do portal">
+        <article class="stat-card">
+          <span>Notícias publicadas</span>
+          <strong id="publishedCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>Rascunhos</span>
+          <strong id="draftCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>Campanhas ativas</span>
+          <strong id="campaignCount">0</strong>
+        </article>
+        <article class="stat-card">
+          <span>Visualizações</span>
+          <strong id="viewsCount">0</strong>
+        </article>
+      </section>
+
+      <section class="panel">
+        <div class="panel-header">
+          <h2>Últimas notícias</h2>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Título</th>
+                <th>Status</th>
+                <th>Categoria</th>
+                <th>Data</th>
+              </tr>
+            </thead>
+            <tbody id="latestNewsBody">
+              <tr><td colspan="4" class="empty-state">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="../assets/js/dashboard.js"></script>
+</body>
+</html>
