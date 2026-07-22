@@ -17,12 +17,21 @@ if(whatsappButton){
 
 const FALLBACK_IMAGE='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"><rect width="800" height="450" fill="#ececea"/><text x="400" y="225" text-anchor="middle" font-family="Arial" font-size="32" font-weight="700" fill="#777">PORTAL SERRA ATUAL</text></svg>`);
 let heroTimer=null;
+let breakingTimer=null;
 const safe=(value='')=>{const div=document.createElement('div');div.textContent=value;return div.innerHTML};
 const imageOf=item=>item.cover_image_url||item.image_url||FALLBACK_IMAGE;
 const categoryOf=item=>item.category?.name||'Notícias';
 const linkFor=item=>`noticia.html?slug=${encodeURIComponent(item.slug||item.id)}`;
 function formatDate(value){if(!value)return'';return new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeStyle:'short'}).format(new Date(value))}
 function applyImageFallbacks(root=document){root.querySelectorAll('img').forEach(img=>{if(img.dataset.fallbackReady)return;img.dataset.fallbackReady='1';img.addEventListener('error',()=>{if(img.src!==FALLBACK_IMAGE)img.src=FALLBACK_IMAGE})})}
+
+function setupBreakingStyle(){
+  if(document.getElementById('breakingTickerStyle'))return;
+  const style=document.createElement('style');
+  style.id='breakingTickerStyle';
+  style.textContent=`.breaking .wrap{overflow:hidden}.breaking-ticker{position:relative;display:block;flex:1;min-width:0;height:38px;color:#fff}.breaking-ticker-item{position:absolute;inset:0;display:flex;align-items:center;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transform:translateY(100%);transition:opacity .45s ease,transform .45s ease}.breaking-ticker-item.active{opacity:1;transform:translateY(0)}.breaking-ticker-item.leaving{opacity:0;transform:translateY(-100%)}@media(max-width:620px){.breaking-ticker{height:32px}.breaking-ticker-item{font-size:12px}}`;
+  document.head.appendChild(style);
+}
 
 function clearDemoContent(){
   const hero=document.querySelector('.hero');
@@ -73,7 +82,24 @@ function renderLatest(items){
 }
 
 function renderMostRead(items){const list=document.querySelector('.most-read ol');if(list)list.innerHTML=items.length?items.slice(0,4).map(item=>`<li><a href="${linkFor(item)}">${safe(item.title)}</a></li>`).join(''):'<li>Nenhuma notícia disponível.</li>'}
-function renderBreaking(items){const breaking=items.find(item=>item.is_breaking);document.querySelector('.breaking span').textContent=breaking?.title||items[0]?.title||'Portal Serra Atual'}
+function renderBreaking(items){
+  const wrap=document.querySelector('.breaking .wrap');
+  if(!wrap)return;
+  setupBreakingStyle();
+  clearInterval(breakingTimer);
+  const news=items.slice(0,10);
+  if(!news.length){wrap.innerHTML='<strong>AGORA</strong><span>Portal Serra Atual</span>';return}
+  wrap.innerHTML=`<strong>AGORA</strong><div class="breaking-ticker">${news.map((item,index)=>`<a class="breaking-ticker-item${index===0?' active':''}" href="${linkFor(item)}">${safe(item.title)}</a>`).join('')}</div>`;
+  if(news.length===1)return;
+  let current=0;
+  breakingTimer=setInterval(()=>{
+    const links=[...wrap.querySelectorAll('.breaking-ticker-item')];
+    links[current].classList.remove('active');links[current].classList.add('leaving');
+    current=(current+1)%links.length;
+    links[current].classList.remove('leaving');links[current].classList.add('active');
+    setTimeout(()=>links.forEach((link,index)=>{if(index!==current)link.classList.remove('leaving')}),500);
+  },4500);
+}
 function normalizeCampaign(item){return{...item,target_url:item.target_url||item.link_url||null,starts_at:item.starts_at||item.start_date||null,ends_at:item.ends_at||item.end_date||null}}
 function campaignIsValid(item){const now=Date.now(),starts=item.starts_at?new Date(item.starts_at).getTime():null,ends=item.ends_at?new Date(item.ends_at).getTime():null;return item.status==='active'&&(!starts||starts<=now)&&(!ends||ends>=now)}
 function renderTopCampaign(item){const slot=document.getElementById('topBanner');if(!slot||!item?.desktop_image_url)return;const href=item.target_url||'#',mobile=item.mobile_image_url||item.desktop_image_url;slot.classList.add('real-ad');slot.innerHTML=`<a href="${safe(href)}" ${item.target_url?'target="_blank" rel="noopener"':''}><picture><source media="(max-width:620px)" srcset="${safe(mobile)}"><img src="${safe(item.desktop_image_url)}" alt="${safe(item.name||'Publicidade')}"></picture></a>`}
