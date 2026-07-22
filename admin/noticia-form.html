@@ -24,7 +24,22 @@
           <div class="field"><label for="slug">Endereço amigável</label><input id="slug" class="control" type="text" required></div>
           <div class="field"><label for="subtitle">Subtítulo</label><textarea id="subtitle" class="control" rows="3"></textarea></div>
           <div class="field"><label for="coverImage">Imagem de capa</label><label class="upload-box" for="coverImage"><strong>Selecionar imagem</strong><span>JPG, PNG ou WEBP</span></label><input id="coverImage" type="file" accept="image/jpeg,image/png,image/webp" hidden><input id="coverImageUrl" type="hidden"><img id="imagePreview" class="image-preview" alt="Prévia da imagem de capa"></div>
-          <div class="field"><label for="content">Conteúdo</label><textarea id="content" class="control editor-field" rows="20" required></textarea></div>
+
+          <section class="block-editor-section">
+            <div class="block-editor-heading"><div><span class="eyebrow">Matéria</span><h2>Editor por blocos</h2><p>Adicione e organize textos, imagens, vídeos e destaques.</p></div><button id="addFirstText" class="button button-secondary" type="button">+ Texto</button></div>
+            <div id="blocksEditor" class="blocks-editor"></div>
+            <div class="block-toolbar" aria-label="Adicionar bloco">
+              <button type="button" data-add-block="text">+ Texto</button>
+              <button type="button" data-add-block="image">+ Imagem</button>
+              <button type="button" data-add-block="gallery">+ Galeria</button>
+              <button type="button" data-add-block="video">+ Vídeo</button>
+              <button type="button" data-add-block="quote">+ Citação</button>
+              <button type="button" data-add-block="highlight">+ Destaque</button>
+              <button type="button" data-add-block="ad">+ Publicidade</button>
+            </div>
+            <input id="content" type="hidden" required>
+          </section>
+
           <div class="field"><label for="metaDescription">Descrição para Google e redes sociais</label><textarea id="metaDescription" class="control" rows="3" maxlength="300"></textarea></div>
         </section>
         <aside class="form-sidebar">
