@@ -4,6 +4,7 @@ const toggle = document.getElementById('searchToggle');
 const panel = document.getElementById('searchPanel');
 const input = document.getElementById('newsSearch');
 const bottomAd = document.getElementById('bottomAd');
+document.querySelector('a[href="admin/login.html"]')?.remove();
 const FALLBACK_IMAGE = 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"><rect width="800" height="450" fill="#ececea"/><text x="400" y="225" text-anchor="middle" font-family="Arial" font-size="32" font-weight="700" fill="#777">PORTAL SERRA ATUAL</text><text x="400" y="265" text-anchor="middle" font-family="Arial" font-size="19" fill="#888">Imagem indisponível</text></svg>`);
 
 function safe(value = '') {
