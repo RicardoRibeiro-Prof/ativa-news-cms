@@ -3,14 +3,70 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="refresh" content="0; url=./admin/login.html">
+  <meta name="description" content="Portal Serra Atual — notícias de São Raimundo Nonato e região.">
   <title>Portal Serra Atual</title>
-  <style>
-    body{margin:0;min-height:100vh;display:grid;place-items:center;background:#0d0f12;color:#fff;font-family:Segoe UI,Arial,sans-serif}
-    a{color:#ff6a00}
-  </style>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="./assets/css/portal.css">
 </head>
 <body>
-  <p>Redirecionando para o painel administrativo... <a href="./admin/login.html">Abrir painel</a></p>
+  <header class="site-header">
+    <div class="topbar"><div class="container topbar-inner"><span>São Raimundo Nonato • Piauí</span><span id="currentDate"></span></div></div>
+    <div class="container brand-row">
+      <a class="portal-brand" href="./"><span>Serra</span> Atual</a>
+      <div class="header-ad">ESPAÇO PUBLICITÁRIO</div>
+      <a class="admin-link" href="./admin/login.html">Painel</a>
+    </div>
+    <nav class="main-nav">
+      <div class="container nav-inner" id="categoryMenu">
+        <a class="active" href="./">Início</a>
+        <a href="#ultimas">Últimas</a>
+        <a href="#regiao">Região</a>
+        <a href="#politica">Política</a>
+        <a href="#saude">Saúde</a>
+        <a href="#esportes">Esportes</a>
+      </div>
+    </nav>
+  </header>
+
+  <div class="breaking-bar" id="breakingBar" hidden>
+    <div class="container"><strong>URGENTE</strong><span id="breakingText"></span></div>
+  </div>
+
+  <main class="container portal-main">
+    <section class="hero-grid" id="heroGrid">
+      <article class="hero-card skeleton-card"></article>
+      <div class="side-headlines"><article class="small-card skeleton-card"></article><article class="small-card skeleton-card"></article></div>
+    </section>
+
+    <section class="ad-banner">ANUNCIE AQUI • SUA MARCA EM DESTAQUE</section>
+
+    <section class="content-grid" id="ultimas">
+      <div>
+        <div class="section-heading"><div><span>ATUALIZAÇÃO CONSTANTE</span><h2>Últimas notícias</h2></div></div>
+        <div class="news-list" id="latestNews"><p class="loading">Carregando notícias...</p></div>
+      </div>
+      <aside>
+        <div class="sidebar-box">
+          <span class="box-label">MAIS LIDAS</span>
+          <h3>Em destaque</h3>
+          <div id="mostRead" class="ranking-list"></div>
+        </div>
+        <div class="square-ad">PUBLICIDADE<br><small>300 × 300</small></div>
+      </aside>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-grid">
+      <div><a class="portal-brand footer-brand" href="./"><span>Serra</span> Atual</a><p>Informação regional com credibilidade, agilidade e compromisso com a comunidade.</p></div>
+      <div><h4>Navegação</h4><a href="./">Início</a><a href="#ultimas">Últimas notícias</a><a href="./admin/login.html">Área administrativa</a></div>
+      <div><h4>Desenvolvimento</h4><a href="https://ativadigitalon.com.br/" target="_blank" rel="noopener">Ativa Digital ON</a></div>
+    </div>
+    <div class="container copyright">© 2026 Portal Serra Atual. Todos os direitos reservados.</div>
+  </footer>
+
+  <script type="module" src="./assets/js/portal.js"></script>
 </body>
 </html>
