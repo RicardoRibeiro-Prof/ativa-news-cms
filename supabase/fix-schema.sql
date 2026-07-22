@@ -47,8 +47,7 @@ alter table public.authors
   add column if not exists created_at timestamptz default now();
 
 grant usage on schema public to anon, authenticated;
-grant select on public.categories, public.authors to anon, authenticated;
-grant select on public.news to anon, authenticated;
+grant select on public.categories, public.authors, public.news, public.ad_campaigns to anon, authenticated;
 grant select, insert, update, delete on public.news, public.categories, public.authors, public.advertisers, public.ad_campaigns to authenticated;
 
 alter table public.news enable row level security;
@@ -75,6 +74,9 @@ create policy authenticated_manage_authors on public.authors for all to authenti
 
 drop policy if exists authenticated_manage_advertisers on public.advertisers;
 create policy authenticated_manage_advertisers on public.advertisers for all to authenticated using (true) with check (true);
+
+drop policy if exists public_read_active_campaigns on public.ad_campaigns;
+create policy public_read_active_campaigns on public.ad_campaigns for select to anon, authenticated using (status = 'active' or auth.role() = 'authenticated');
 
 drop policy if exists authenticated_manage_campaigns on public.ad_campaigns;
 create policy authenticated_manage_campaigns on public.ad_campaigns for all to authenticated using (true) with check (true);
