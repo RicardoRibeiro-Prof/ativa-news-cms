@@ -12,108 +12,29 @@
     <aside class="sidebar">
       <h2>Serra Atual</h2>
       <nav aria-label="Menu administrativo">
-        <a href="./dashboard.html">Dashboard</a>
-        <a href="./noticias.html">Notícias</a>
-        <a href="./categorias.html">Categorias</a>
-        <a class="active" href="./campanhas.html">Campanhas</a>
-        <a href="./anunciantes.html">Anunciantes</a>
-        <a href="../index.html">Ver portal</a>
+        <a href="./dashboard.html">Dashboard</a><a href="./noticias.html">Notícias</a><a href="./categorias.html">Categorias</a><a class="active" href="./campanhas.html">Campanhas</a><a href="./anunciantes.html">Anunciantes</a><a href="../index.html">Ver portal</a>
       </nav>
     </aside>
-
     <main class="admin-main">
-      <header class="admin-header">
-        <div>
-          <span class="eyebrow">Publicidade</span>
-          <h1>Campanhas</h1>
-          <p>Cadastre os banners que serão exibidos no portal.</p>
-        </div>
-      </header>
-
+      <header class="admin-header"><div><span class="eyebrow">Publicidade</span><h1>Campanhas</h1><p>Envie uma única arte. O sistema gera automaticamente as versões para computador e celular.</p></div></header>
       <section class="panel" style="padding:22px">
         <form id="entityForm" class="form-layout" style="grid-template-columns:minmax(0,1fr) 360px">
           <div>
-            <div class="field">
-              <label for="name">Nome da campanha</label>
-              <input id="name" class="control" required placeholder="Ex.: Campanha de julho">
-            </div>
-
-            <div class="field">
-              <label for="position">Posição no portal</label>
-              <select id="position" class="control" required>
-                <option value="top_banner">Banner superior 970 × 250</option>
-                <option value="header_strip">Faixa superior 1180 × 90</option>
-                <option value="half_left">Banner duplo esquerdo 570 × 120</option>
-                <option value="half_right">Banner duplo direito 570 × 120</option>
-                <option value="sidebar_small">Lateral 300 × 100</option>
-                <option value="sidebar_square">Lateral 300 × 250</option>
-                <option value="sidebar_tall">Lateral 300 × 600</option>
-                <option value="in_feed">Entre notícias 970 × 90</option>
-                <option value="technology">Editoria Tecnologia 728 × 180</option>
-                <option value="footer">Rodapé 970 × 90</option>
-                <option value="bottom_fixed">Faixa fixa inferior</option>
-              </select>
-            </div>
-
-            <div class="field">
-              <label for="target_url">Link do anúncio</label>
-              <input id="target_url" class="control" type="url" placeholder="https://empresa.com.br">
-            </div>
-
-            <div class="field">
-              <label for="status">Status</label>
-              <select id="status" class="control">
-                <option value="active">Ativa</option>
-                <option value="draft">Rascunho</option>
-                <option value="paused">Pausada</option>
-              </select>
-            </div>
-
-            <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
-              <div>
-                <label for="starts_at">Início</label>
-                <input id="starts_at" class="control" type="date">
-              </div>
-              <div>
-                <label for="ends_at">Fim</label>
-                <input id="ends_at" class="control" type="date">
-              </div>
-            </div>
+            <div class="field"><label for="name">Nome da campanha</label><input id="name" class="control" required placeholder="Ex.: Campanha de julho"></div>
+            <div class="field"><label for="position">Posição no portal</label><select id="position" class="control" required><option value="top_banner">Banner superior 970 × 250</option><option value="header_strip">Faixa superior 1180 × 90</option><option value="half_left">Banner duplo esquerdo 570 × 120</option><option value="half_right">Banner duplo direito 570 × 120</option><option value="sidebar_small">Lateral 300 × 100</option><option value="sidebar_square">Lateral 300 × 250</option><option value="sidebar_tall">Lateral 300 × 600</option><option value="in_feed">Entre notícias 970 × 90</option><option value="technology">Editoria Tecnologia 728 × 180</option><option value="footer">Rodapé 970 × 90</option><option value="bottom_fixed">Faixa fixa inferior</option></select></div>
+            <div class="field"><label for="target_url">Link do anúncio</label><input id="target_url" class="control" type="url" placeholder="https://empresa.com.br"></div>
+            <div class="field"><label for="status">Status</label><select id="status" class="control"><option value="active">Ativa</option><option value="draft">Rascunho</option><option value="paused">Pausada</option></select></div>
+            <div class="field" style="display:grid;grid-template-columns:1fr 1fr;gap:14px"><div><label for="starts_at">Início</label><input id="starts_at" class="control" type="date"></div><div><label for="ends_at">Fim</label><input id="ends_at" class="control" type="date"></div></div>
           </div>
-
           <aside class="form-sidebar">
-            <section class="panel">
-              <h2>Banner para computador</h2>
-              <input id="desktopImage" class="control" type="file" accept="image/jpeg,image/png,image/webp">
-              <small>Use o tamanho indicado para a posição escolhida.</small>
-              <img id="desktopPreview" class="image-preview" alt="Prévia do banner para computador">
-            </section>
-
-            <section class="panel">
-              <h2>Banner para celular</h2>
-              <input id="mobileImage" class="control" type="file" accept="image/jpeg,image/png,image/webp">
-              <small>Recomendado: 320 × 100 px para banners horizontais.</small>
-              <img id="mobilePreview" class="image-preview" alt="Prévia do banner para celular">
-            </section>
-
-            <button id="saveCampaignButton" class="button button-block" type="submit">Salvar campanha</button>
-            <p id="entityMessage" class="form-message" aria-live="polite"></p>
+            <section class="panel"><h2>Arte da campanha</h2><input id="campaignImage" class="control" type="file" accept="image/jpeg,image/png,image/webp" required><small>Envie uma imagem vertical, quadrada ou horizontal. O sistema cria os banners sem cortar informações importantes.</small><img id="campaignPreview" class="image-preview" alt="Prévia da arte"><div id="generatedPreview" style="display:grid;gap:10px;margin-top:12px"></div></section>
+            <button id="saveCampaignButton" class="button button-block" type="submit">Gerar e salvar campanha</button><p id="entityMessage" class="form-message" aria-live="polite"></p>
           </aside>
         </form>
       </section>
-
-      <section class="panel">
-        <div class="panel-header"><h2>Campanhas cadastradas</h2></div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Campanha</th><th>Posição</th><th>Status</th><th>Período</th><th>Ações</th></tr></thead>
-            <tbody id="entityBody"><tr><td colspan="5" class="empty-state">Carregando...</td></tr></tbody>
-          </table>
-        </div>
-      </section>
+      <section class="panel"><div class="panel-header"><h2>Campanhas cadastradas</h2></div><div class="table-wrap"><table><thead><tr><th>Campanha</th><th>Posição</th><th>Status</th><th>Período</th><th>Ações</th></tr></thead><tbody id="entityBody"><tr><td colspan="5" class="empty-state">Carregando...</td></tr></tbody></table></div></section>
     </main>
   </div>
-
-  <script type="module" src="../assets/js/entities-admin.js"></script>
+  <script type="module" src="../assets/js/entities-admin.js?v=20260722-auto-banner"></script>
 </body>
 </html>
