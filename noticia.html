@@ -8,8 +8,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="assets/css/public.css">
-  <link rel="stylesheet" href="assets/css/article.css">
+  <link rel="stylesheet" href="assets/css/public.css?v=20260722-2">
+  <link rel="stylesheet" href="assets/css/article.css?v=20260722-2">
+  <style>
+    .article-page{padding:48px 0 72px!important}
+    .article-shell{width:min(980px,calc(100% - 64px))!important;max-width:980px!important;margin:0 auto!important}
+    .article-header{position:static!important;padding:0!important;margin:0 0 32px!important;background:transparent!important}
+    .article-header h1{position:static!important;font-size:clamp(34px,4.7vw,58px)!important;line-height:1.08!important;margin:16px 0!important;overflow-wrap:anywhere}
+    @media(max-width:620px){.article-shell{width:calc(100% - 32px)!important}.article-header h1{font-size:clamp(30px,10vw,40px)!important}}
+  </style>
 </head>
 <body>
   <div class="breaking"><div class="wrap"><strong>AGORA</strong><span>Portal Serra Atual</span></div></div>
@@ -24,7 +31,7 @@
   </header>
 
   <main class="article-page">
-    <article class="wrap article-shell" id="articleRoot">
+    <article class="article-shell" id="articleRoot">
       <div class="article-loading">Carregando matéria...</div>
     </article>
   </main>
@@ -37,6 +44,6 @@
     </div>
   </footer>
 
-  <script type="module" src="assets/js/article.js"></script>
+  <script type="module" src="assets/js/article.js?v=20260722-2"></script>
 </body>
 </html>
