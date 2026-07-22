@@ -1,38 +1,31 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anunciantes | Portal Serra Atual</title>
-  <link rel="stylesheet" href="../assets/css/admin.css">
+  <link rel="stylesheet" href="../assets/css/admin.css"><link rel="stylesheet" href="../assets/css/news-admin.css">
 </head>
 <body data-entity="advertisers">
-  <div class="admin-shell">
-    <aside class="sidebar">
-      <h2>Serra Atual</h2>
-      <nav aria-label="Menu administrativo">
-        <a href="./dashboard.html">Dashboard</a>
-        <a href="./noticias.html">Notícias</a>
-        <a href="./categorias.html">Categorias</a>
-        <a href="./campanhas.html">Campanhas</a>
-        <a class="active" href="./anunciantes.html">Anunciantes</a>
-        <a href="../index.html">Ver portal</a>
-      </nav>
-    </aside>
-    <main class="admin-main">
-      <header class="admin-header"><div><h1>Anunciantes</h1><p>Cadastre as empresas parceiras do portal.</p></div></header>
-      <section class="panel" style="padding:22px">
-        <form id="entityForm" class="entity-form">
-          <div class="form-group"><label for="name">Empresa</label><input id="name" required placeholder="Nome da empresa"></div>
-          <div class="form-group"><label for="phone">Telefone</label><input id="phone" placeholder="(89) 99999-9999"></div>
-          <div class="form-group"><label for="email">E-mail</label><input id="email" type="email" placeholder="contato@empresa.com"></div>
-          <button class="primary-button" style="width:auto" type="submit">Adicionar anunciante</button>
-          <p id="entityMessage" class="form-message"></p>
-        </form>
-      </section>
-      <section class="panel"><div class="panel-header"><h2>Anunciantes cadastrados</h2></div><div class="table-wrap"><table><thead><tr><th>Empresa</th><th>Telefone</th><th>E-mail</th><th>Ações</th></tr></thead><tbody id="entityBody"><tr><td colspan="4" class="empty-state">Carregando...</td></tr></tbody></table></div></section>
-    </main>
-  </div>
-  <script type="module" src="../assets/js/entities-admin.js"></script>
-</body>
-</html>
+<div class="admin-shell">
+  <aside class="sidebar"><h2>Serra Atual</h2><nav aria-label="Menu administrativo"><a href="./dashboard.html">Dashboard</a><a href="./noticias.html">Notícias</a><a href="./categorias.html">Categorias</a><a href="./campanhas.html">Campanhas</a><a class="active" href="./anunciantes.html">Anunciantes</a><a href="../index.html">Ver portal</a></nav></aside>
+  <main class="admin-main">
+    <header class="admin-header"><div><span class="eyebrow">Parceiros</span><h1>Anunciantes</h1><p>Cadastre empresas e envie as logos que aparecerão no portal.</p></div></header>
+    <section class="panel" style="padding:22px">
+      <form id="entityForm" class="form-layout" style="grid-template-columns:minmax(0,1fr) 340px">
+        <div>
+          <div class="field"><label for="name">Empresa</label><input id="name" class="control" required placeholder="Nome da empresa"></div>
+          <div class="field"><label for="phone">Telefone / WhatsApp</label><input id="phone" class="control" placeholder="(89) 99999-9999"></div>
+          <div class="field"><label for="email">E-mail</label><input id="email" class="control" type="email" placeholder="contato@empresa.com"></div>
+          <div class="field"><label for="website">Site ou Instagram</label><input id="website" class="control" type="url" placeholder="https://..."></div>
+        </div>
+        <aside class="form-sidebar">
+          <section class="panel"><h2>Logo da empresa</h2><label class="upload-box" for="logoImage"><strong>Selecionar logo</strong><span>PNG com fundo transparente é o melhor formato</span></label><input id="logoImage" type="file" accept="image/jpeg,image/png,image/webp" hidden><img id="logoPreview" class="image-preview" alt="Prévia da logo"></section>
+          <button class="button button-block" type="submit">Salvar anunciante</button><p id="entityMessage" class="form-message"></p>
+        </aside>
+      </form>
+    </section>
+    <section class="panel"><div class="panel-header"><h2>Anunciantes cadastrados</h2></div><div class="table-wrap"><table><thead><tr><th>Logo</th><th>Empresa</th><th>Telefone</th><th>E-mail</th><th>Ações</th></tr></thead><tbody id="entityBody"><tr><td colspan="5" class="empty-state">Carregando...</td></tr></tbody></table></div></section>
+  </main>
+</div>
+<script type="module" src="../assets/js/entities-admin.js"></script>
+</body></html>
