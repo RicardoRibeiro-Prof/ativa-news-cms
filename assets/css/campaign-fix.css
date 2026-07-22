@@ -1,7 +1,7 @@
 .campaign-slot-empty{display:none!important}
-.real-ad{display:block!important;width:100%;overflow:hidden;border:0!important;background:transparent!important}
+.real-ad{display:block!important;width:100%;overflow:hidden;border:0!important;background:#111!important;border-radius:12px!important}
 .real-ad>a,.real-ad picture{display:block;width:100%;height:100%}
-.real-ad img{display:block;width:100%;height:100%!important;object-fit:cover!important;object-position:center!important;background:transparent;border-radius:12px}
+.real-ad img{display:block;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;border-radius:12px!important}
 .campaign-half_left,.campaign-half_right{height:120px!important;aspect-ratio:570/120}
 .campaign-top_banner{max-width:970px;height:auto!important;aspect-ratio:970/250}
 .campaign-header_strip{height:90px!important;aspect-ratio:1180/90}
@@ -14,19 +14,19 @@
 .campaign-bottom_fixed{height:auto!important;aspect-ratio:auto}
 .campaign-bottom_fixed img{height:auto!important;max-height:120px;object-fit:cover!important}
 @media(max-width:900px){
-  .ad-duo{grid-template-columns:1fr!important;gap:16px!important}
+  .ad-duo{grid-template-columns:1fr!important;gap:14px!important}
   .campaign-half_left,.campaign-half_right,
   .campaign-top_banner,.campaign-header_strip,.campaign-in_feed,.campaign-technology,.campaign-footer{
-    width:100%!important;height:auto!important;aspect-ratio:320/100!important;margin:16px auto!important;border-radius:12px!important
+    width:100%!important;height:100px!important;aspect-ratio:auto!important;margin:16px auto!important
   }
-  .campaign-sidebar_small{width:min(100%,320px)!important;height:auto!important;aspect-ratio:320/100!important;margin:16px auto!important}
-  .campaign-sidebar_square{width:min(100%,300px)!important;height:auto!important;aspect-ratio:300/250!important;margin:16px auto!important}
-  .campaign-sidebar_tall{width:min(100%,300px)!important;height:auto!important;aspect-ratio:300/600!important;margin:16px auto!important}
-  .real-ad img{width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important}
+  .campaign-half_left img,.campaign-half_right img{object-position:center 22%!important}
+  .campaign-sidebar_small{width:min(100%,320px)!important;height:100px!important;aspect-ratio:auto!important;margin:16px auto!important}
+  .campaign-sidebar_square{width:min(100%,300px)!important;height:250px!important;aspect-ratio:auto!important;margin:16px auto!important}
+  .campaign-sidebar_tall{width:min(100%,300px)!important;height:600px!important;aspect-ratio:auto!important;margin:16px auto!important}
   .content aside .campaign-loaded{margin:16px auto!important}
 }
 @media(max-width:620px){
-  .ad-duo{width:calc(100% - 28px)!important;margin:18px auto!important}
-  .campaign-half_left,.campaign-half_right{min-height:100px!important;max-height:120px!important}
-  .campaign-half_left img,.campaign-half_right img{object-fit:cover!important;object-position:center!important}
+  .ad-duo{width:calc(100% - 32px)!important;margin:18px auto!important}
+  .campaign-half_left,.campaign-half_right{height:100px!important;min-height:100px!important;max-height:100px!important}
+  .campaign-half_left img,.campaign-half_right img{object-fit:cover!important;object-position:center 20%!important}
 }
