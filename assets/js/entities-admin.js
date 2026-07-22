@@ -11,20 +11,13 @@ const configs = {
   categories: {
     order: 'name',
     fields: ['name', 'slug'],
-    columns: [
-      ['name', 'Sem nome'],
-      ['slug', '—'],
-    ],
+    columns: [['name', 'Sem nome'], ['slug', '—']],
     emptyCols: 3,
   },
   advertisers: {
     order: 'created_at',
     fields: ['name', 'phone', 'email'],
-    columns: [
-      ['name', 'Sem nome'],
-      ['phone', '—'],
-      ['email', '—'],
-    ],
+    columns: [['name', 'Sem nome'], ['phone', '—'], ['email', '—']],
     emptyCols: 4,
   },
 };
@@ -45,7 +38,7 @@ function showMessage(text, ok = false) {
 
 function formatDate(value) {
   if (!value) return '—';
-  return new Intl.DateTimeFormat('pt-BR').format(new Date(`${value}T00:00:00`));
+  return new Intl.DateTimeFormat('pt-BR').format(new Date(value));
 }
 
 function renderCampaigns(items = []) {
@@ -59,7 +52,7 @@ function renderCampaigns(items = []) {
       <td><strong>${escapeHtml(item.name || 'Sem nome')}</strong>${item.desktop_image_url ? '<br><small>Banner enviado</small>' : '<br><small>Sem imagem</small>'}</td>
       <td>${escapeHtml(item.position || '—')}</td>
       <td>${escapeHtml(item.status || 'draft')}</td>
-      <td>${formatDate(item.start_date)} até ${formatDate(item.end_date)}</td>
+      <td>${formatDate(item.starts_at)} até ${formatDate(item.ends_at)}</td>
       <td><button class="entity-delete button button-small button-danger" type="button" data-id="${escapeHtml(item.id)}">Excluir</button></td>
     </tr>
   `).join('');
@@ -78,12 +71,9 @@ function render(items = []) {
   }
 
   body.innerHTML = items.map((item) => {
-    const cells = config.columns
-      .map(([field, fallback]) => `<td>${escapeHtml(item[field] || fallback)}</td>`)
-      .join('');
+    const cells = config.columns.map(([field, fallback]) => `<td>${escapeHtml(item[field] || fallback)}</td>`).join('');
     return `<tr>${cells}<td><button class="entity-delete" type="button" data-id="${escapeHtml(item.id)}">Excluir</button></td></tr>`;
   }).join('');
-
   bindDeleteButtons();
 }
 
@@ -143,7 +133,6 @@ async function saveCampaign(event) {
   try {
     const desktopFile = document.querySelector('#desktopImage').files?.[0];
     const mobileFile = document.querySelector('#mobileImage').files?.[0];
-
     if (!desktopFile) throw new Error('Selecione o banner para computador.');
 
     showMessage('Enviando banner para computador...', true);
@@ -156,13 +145,16 @@ async function saveCampaign(event) {
       mobileUrl = mobileUpload.publicUrl;
     }
 
+    const startsValue = document.querySelector('#starts_at').value;
+    const endsValue = document.querySelector('#ends_at').value;
+
     const payload = {
       name: document.querySelector('#name').value.trim(),
       position: document.querySelector('#position').value,
       status: document.querySelector('#status').value,
-      link_url: document.querySelector('#link_url').value.trim() || null,
-      start_date: document.querySelector('#start_date').value || null,
-      end_date: document.querySelector('#end_date').value || null,
+      target_url: document.querySelector('#target_url').value.trim() || null,
+      starts_at: startsValue ? new Date(`${startsValue}T00:00:00`).toISOString() : null,
+      ends_at: endsValue ? new Date(`${endsValue}T23:59:59`).toISOString() : null,
       desktop_image_url: desktopUpload.publicUrl,
       mobile_image_url: mobileUrl,
     };
@@ -190,12 +182,9 @@ if (entity === 'ad_campaigns') {
   form?.addEventListener('submit', async (event) => {
     event.preventDefault();
     showMessage('Salvando...', true);
-
     const payload = buildPayload();
     const { error } = await supabase.from(entity).insert(payload);
-
     if (error) return showMessage(error.message);
-
     form.reset();
     showMessage('Registro adicionado com sucesso.', true);
     await loadItems();
