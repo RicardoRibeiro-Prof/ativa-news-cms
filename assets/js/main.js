@@ -23,10 +23,7 @@ function categoryOf(item) {
 
 function formatDate(value) {
   if (!value) return '';
-  return new Intl.DateTimeFormat('pt-BR', {
-    dateStyle: 'short',
-    timeStyle: 'short'
-  }).format(new Date(value));
+  return new Intl.DateTimeFormat('pt-BR', { dateStyle: 'short', timeStyle: 'short' }).format(new Date(value));
 }
 
 function applyImageFallbacks(root = document) {
@@ -47,28 +44,7 @@ function renderHero(items) {
   if (!items.length) return;
   const [main, ...rest] = items;
   const hero = document.querySelector('.hero');
-  hero.innerHTML = `
-    <a class="hero-main news-card" href="${linkFor(main)}" data-search="${safe(`${categoryOf(main)} ${main.title}`)}">
-      <img src="${safe(imageOf(main))}" alt="${safe(main.title)}">
-      <div class="shade"></div>
-      <div class="hero-text">
-        <span class="tag">${safe(categoryOf(main))}</span>
-        <h1>${safe(main.title)}</h1>
-        <p>${safe(main.subtitle || '')}</p>
-      </div>
-    </a>
-    <div class="hero-side">
-      ${rest.slice(0, 2).map((item) => `
-        <a class="side news-card" href="${linkFor(item)}" data-search="${safe(`${categoryOf(item)} ${item.title}`)}">
-          <img src="${safe(imageOf(item))}" alt="${safe(item.title)}">
-          <div class="shade"></div>
-          <div class="side-text">
-            <span class="tag">${safe(categoryOf(item))}</span>
-            <h2>${safe(item.title)}</h2>
-          </div>
-        </a>
-      `).join('')}
-    </div>`;
+  hero.innerHTML = `<a class="hero-main news-card" href="${linkFor(main)}"><img src="${safe(imageOf(main))}" alt="${safe(main.title)}"><div class="shade"></div><div class="hero-text"><span class="tag">${safe(categoryOf(main))}</span><h1>${safe(main.title)}</h1><p>${safe(main.subtitle || '')}</p></div></a><div class="hero-side">${rest.slice(0, 2).map((item) => `<a class="side news-card" href="${linkFor(item)}"><img src="${safe(imageOf(item))}" alt="${safe(item.title)}"><div class="shade"></div><div class="side-text"><span class="tag">${safe(categoryOf(item))}</span><h2>${safe(item.title)}</h2></div></a>`).join('')}</div>`;
 }
 
 function renderLatest(items) {
@@ -77,19 +53,7 @@ function renderLatest(items) {
   const nativeAd = list.querySelector('.native-ad')?.outerHTML || '';
   const inFeed = list.querySelector('.in-feed')?.outerHTML || '';
   const technology = list.querySelector('#tecnologia')?.outerHTML || '';
-  list.innerHTML = items.map((item, index) => `
-    <a class="list-card news-card" href="${linkFor(item)}" data-search="${safe(`${categoryOf(item)} ${item.title} ${item.subtitle || ''}`)}">
-      <img src="${safe(imageOf(item))}" alt="${safe(item.title)}">
-      <div>
-        <span class="tag">${safe(categoryOf(item))}</span>
-        <h3>${safe(item.title)}</h3>
-        <p>${safe(item.subtitle || item.meta_description || '')}</p>
-        <small>${safe(formatDate(item.published_at || item.created_at))}</small>
-      </div>
-    </a>
-    ${index === 1 ? nativeAd : ''}
-    ${index === 3 ? inFeed : ''}
-  `).join('') + technology;
+  list.innerHTML = items.map((item, index) => `<a class="list-card news-card" href="${linkFor(item)}"><img src="${safe(imageOf(item))}" alt="${safe(item.title)}"><div><span class="tag">${safe(categoryOf(item))}</span><h3>${safe(item.title)}</h3><p>${safe(item.subtitle || item.meta_description || '')}</p><small>${safe(formatDate(item.published_at || item.created_at))}</small></div></a>${index === 1 ? nativeAd : ''}${index === 3 ? inFeed : ''}`).join('') + technology;
 }
 
 function renderMostRead(items) {
@@ -105,19 +69,34 @@ function renderBreaking(items) {
   if (bar) bar.textContent = breaking.title;
 }
 
+function campaignIsValid(item) {
+  const now = Date.now();
+  const starts = item.starts_at ? new Date(item.starts_at).getTime() : null;
+  const ends = item.ends_at ? new Date(item.ends_at).getTime() : null;
+  return item.status === 'active' && (!starts || starts <= now) && (!ends || ends >= now);
+}
+
+function renderTopCampaign(item) {
+  const slot = document.getElementById('topBanner');
+  if (!slot || !item?.desktop_image_url) return;
+  const href = item.target_url || '#';
+  const mobile = item.mobile_image_url || item.desktop_image_url;
+  slot.classList.add('real-ad');
+  slot.innerHTML = `<a href="${safe(href)}" ${item.target_url ? 'target="_blank" rel="noopener"' : ''}><picture><source media="(max-width:620px)" srcset="${safe(mobile)}"><img src="${safe(item.desktop_image_url)}" alt="${safe(item.name || 'Publicidade')}"></picture></a>`;
+}
+
+async function loadCampaigns() {
+  const { data, error } = await supabase.from('ad_campaigns').select('id,name,position,status,desktop_image_url,mobile_image_url,target_url,starts_at,ends_at').eq('status', 'active').order('created_at', { ascending: false });
+  if (error) { console.warn('Campanhas não carregadas:', error.message); return; }
+  const campaigns = (data || []).filter(campaignIsValid);
+  const top = campaigns.find((item) => item.position === 'top_banner' || item.position === 'Banner superior 970 × 250');
+  if (top) renderTopCampaign(top);
+  applyImageFallbacks();
+}
+
 async function loadNews() {
-  const { data, error } = await supabase
-    .from('news')
-    .select('id,slug,title,subtitle,meta_description,cover_image_url,image_url,created_at,published_at,is_featured,is_breaking,category:categories(name)')
-    .eq('status', 'published')
-    .order('published_at', { ascending: false })
-    .limit(20);
-
-  if (error) {
-    console.warn('Portal mantido com conteúdo demonstrativo:', error.message);
-    return;
-  }
-
+  const { data, error } = await supabase.from('news').select('id,slug,title,subtitle,meta_description,cover_image_url,image_url,created_at,published_at,is_featured,is_breaking,category:categories(name)').eq('status', 'published').order('published_at', { ascending: false }).limit(20);
+  if (error) { console.warn('Portal mantido com conteúdo demonstrativo:', error.message); return; }
   const items = data || [];
   if (!items.length) return;
   const featured = [...items].sort((a, b) => Number(b.is_featured) - Number(a.is_featured));
@@ -128,24 +107,10 @@ async function loadNews() {
   applyImageFallbacks();
 }
 
-toggle?.addEventListener('click', () => {
-  panel.classList.toggle('open');
-  if (panel.classList.contains('open')) input.focus();
-});
-
-input?.addEventListener('input', (event) => {
-  const query = event.target.value.toLowerCase().trim();
-  document.querySelectorAll('.news-card').forEach((card) => {
-    const text = `${card.dataset.search || ''} ${card.innerText}`.toLowerCase();
-    card.style.display = query && !text.includes(query) ? 'none' : '';
-  });
-});
-
-document.querySelectorAll('[data-category]').forEach((link) => {
-  link.href = `categoria.html?slug=${encodeURIComponent(link.dataset.category)}`;
-});
-
+toggle?.addEventListener('click', () => { panel.classList.toggle('open'); if (panel.classList.contains('open')) input.focus(); });
+input?.addEventListener('input', (event) => { const query = event.target.value.toLowerCase().trim(); document.querySelectorAll('.news-card').forEach((card) => { const text = `${card.dataset.search || ''} ${card.innerText}`.toLowerCase(); card.style.display = query && !text.includes(query) ? 'none' : ''; }); });
+document.querySelectorAll('[data-category]').forEach((link) => { link.href = `categoria.html?slug=${encodeURIComponent(link.dataset.category)}`; });
 document.querySelector('#bottomAd button')?.addEventListener('click', () => bottomAd?.remove());
 
 applyImageFallbacks();
-loadNews();
+Promise.allSettled([loadNews(), loadCampaigns()]);
