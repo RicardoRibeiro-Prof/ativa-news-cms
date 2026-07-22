@@ -5,7 +5,7 @@ const date = new Intl.DateTimeFormat('pt-BR',{dateStyle:'full'}).format(new Date
 $('#currentDate').textContent = date.charAt(0).toUpperCase()+date.slice(1);
 
 function safe(v=''){const d=document.createElement('div');d.textContent=v;return d.innerHTML}
-function imageOf(n){return n.cover_image_url || n.image_url || ''}
+function imageOf(n){return n.cover_image_url || ''}
 function categoryOf(n){return n.category?.name || 'Notícias'}
 function when(v){if(!v)return '';return new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeStyle:'short'}).format(new Date(v))}
 function img(n){const url=imageOf(n);return url?`<img class="news-image" src="${safe(url)}" alt="">`:'<div class="news-image fallback-image"></div>'}
@@ -26,7 +26,7 @@ function renderRanking(items){
 }
 
 async function load(){
-  const {data,error}=await supabase.from('news').select('id,title,subtitle,meta_description,cover_image_url,image_url,created_at,published_at,is_featured,is_breaking,category:categories(name)').eq('status','published').order('published_at',{ascending:false}).limit(20);
+  const {data,error}=await supabase.from('news').select('id,title,subtitle,meta_description,cover_image_url,created_at,published_at,is_featured,is_breaking,category:categories(name)').eq('status','published').order('published_at',{ascending:false}).limit(20);
   if(error) throw error;
   const items=data||[];
   const featured=[...items].sort((a,b)=>Number(b.is_featured)-Number(a.is_featured));
