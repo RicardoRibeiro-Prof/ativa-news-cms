@@ -1,95 +1,93 @@
--- Execute este arquivo no Supabase > SQL Editor > New query > Run
+-- Execute este arquivo inteiro no Supabase > SQL Editor > New query > Run
 
--- TABELAS PÚBLICAS DE LEITURA
-alter table public.categories enable row level security;
-alter table public.authors enable row level security;
-alter table public.news enable row level security;
+-- Permissões básicas do schema
+GRANT USAGE ON SCHEMA public TO anon, authenticated;
+GRANT USAGE ON SCHEMA storage TO anon, authenticated;
 
--- Painel: usuário autenticado pode gerenciar categorias
- drop policy if exists "authenticated_manage_categories" on public.categories;
-create policy "authenticated_manage_categories"
-on public.categories for all
-to authenticated
-using (true)
-with check (true);
+-- Permissões das tabelas
+GRANT SELECT ON TABLE public.categories TO anon, authenticated;
+GRANT SELECT ON TABLE public.authors TO anon, authenticated;
+GRANT SELECT ON TABLE public.news TO anon, authenticated;
 
--- Portal: qualquer visitante pode ler categorias
- drop policy if exists "public_read_categories" on public.categories;
-create policy "public_read_categories"
-on public.categories for select
-to anon, authenticated
-using (true);
+GRANT ALL PRIVILEGES ON TABLE public.categories TO authenticated;
+GRANT ALL PRIVILEGES ON TABLE public.authors TO authenticated;
+GRANT ALL PRIVILEGES ON TABLE public.news TO authenticated;
+GRANT ALL PRIVILEGES ON TABLE public.advertisers TO authenticated;
+GRANT ALL PRIVILEGES ON TABLE public.ad_campaigns TO authenticated;
+GRANT ALL PRIVILEGES ON TABLE public.news_images TO authenticated;
+GRANT ALL PRIVILEGES ON TABLE public.news_videos TO authenticated;
+GRANT SELECT, INSERT ON TABLE public.news_views TO anon, authenticated;
+GRANT SELECT, INSERT ON TABLE public.ad_clicks TO anon, authenticated;
+GRANT SELECT, INSERT ON TABLE public.ad_impressions TO anon, authenticated;
 
--- Painel: usuário autenticado pode gerenciar autores
- drop policy if exists "authenticated_manage_authors" on public.authors;
-create policy "authenticated_manage_authors"
-on public.authors for all
-to authenticated
-using (true)
-with check (true);
+-- Sequências usadas por colunas identity/serial
+GRANT USAGE, SELECT ON ALL SEQUENCES IN SCHEMA public TO authenticated;
 
--- Portal: qualquer visitante pode ler autores
- drop policy if exists "public_read_authors" on public.authors;
-create policy "public_read_authors"
-on public.authors for select
-to anon, authenticated
-using (true);
+-- RLS DAS TABELAS
+ALTER TABLE public.categories ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.authors ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.news ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.advertisers ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.ad_campaigns ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.news_images ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.news_videos ENABLE ROW LEVEL SECURITY;
 
--- Painel: usuário autenticado pode criar, editar e excluir notícias
- drop policy if exists "authenticated_manage_news" on public.news;
-create policy "authenticated_manage_news"
-on public.news for all
-to authenticated
-using (true)
-with check (true);
+DROP POLICY IF EXISTS "authenticated_manage_categories" ON public.categories;
+CREATE POLICY "authenticated_manage_categories" ON public.categories
+FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
--- Portal: visitantes veem apenas notícias publicadas
- drop policy if exists "public_read_published_news" on public.news;
-create policy "public_read_published_news"
-on public.news for select
-to anon, authenticated
-using (status = 'published');
+DROP POLICY IF EXISTS "public_read_categories" ON public.categories;
+CREATE POLICY "public_read_categories" ON public.categories
+FOR SELECT TO anon, authenticated USING (true);
 
--- OUTRAS TABELAS DO PAINEL
-alter table public.advertisers enable row level security;
-alter table public.ad_campaigns enable row level security;
-alter table public.news_images enable row level security;
-alter table public.news_videos enable row level security;
+DROP POLICY IF EXISTS "authenticated_manage_authors" ON public.authors;
+CREATE POLICY "authenticated_manage_authors" ON public.authors
+FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
- drop policy if exists "authenticated_manage_advertisers" on public.advertisers;
-create policy "authenticated_manage_advertisers" on public.advertisers for all to authenticated using (true) with check (true);
+DROP POLICY IF EXISTS "public_read_authors" ON public.authors;
+CREATE POLICY "public_read_authors" ON public.authors
+FOR SELECT TO anon, authenticated USING (true);
 
- drop policy if exists "authenticated_manage_campaigns" on public.ad_campaigns;
-create policy "authenticated_manage_campaigns" on public.ad_campaigns for all to authenticated using (true) with check (true);
+DROP POLICY IF EXISTS "authenticated_manage_news" ON public.news;
+CREATE POLICY "authenticated_manage_news" ON public.news
+FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
- drop policy if exists "authenticated_manage_news_images" on public.news_images;
-create policy "authenticated_manage_news_images" on public.news_images for all to authenticated using (true) with check (true);
+DROP POLICY IF EXISTS "public_read_published_news" ON public.news;
+CREATE POLICY "public_read_published_news" ON public.news
+FOR SELECT TO anon, authenticated
+USING (status = 'published' OR auth.role() = 'authenticated');
 
- drop policy if exists "authenticated_manage_news_videos" on public.news_videos;
-create policy "authenticated_manage_news_videos" on public.news_videos for all to authenticated using (true) with check (true);
+DROP POLICY IF EXISTS "authenticated_manage_advertisers" ON public.advertisers;
+CREATE POLICY "authenticated_manage_advertisers" ON public.advertisers
+FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
--- STORAGE: bucket portal-images
- drop policy if exists "public_read_portal_images" on storage.objects;
-create policy "public_read_portal_images"
-on storage.objects for select
-to anon, authenticated
-using (bucket_id = 'portal-images');
+DROP POLICY IF EXISTS "authenticated_manage_campaigns" ON public.ad_campaigns;
+CREATE POLICY "authenticated_manage_campaigns" ON public.ad_campaigns
+FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
- drop policy if exists "authenticated_upload_portal_images" on storage.objects;
-create policy "authenticated_upload_portal_images"
-on storage.objects for insert
-to authenticated
-with check (bucket_id = 'portal-images');
+DROP POLICY IF EXISTS "authenticated_manage_news_images" ON public.news_images;
+CREATE POLICY "authenticated_manage_news_images" ON public.news_images
+FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
- drop policy if exists "authenticated_update_portal_images" on storage.objects;
-create policy "authenticated_update_portal_images"
-on storage.objects for update
-to authenticated
-using (bucket_id = 'portal-images')
-with check (bucket_id = 'portal-images');
+DROP POLICY IF EXISTS "authenticated_manage_news_videos" ON public.news_videos;
+CREATE POLICY "authenticated_manage_news_videos" ON public.news_videos
+FOR ALL TO authenticated USING (true) WITH CHECK (true);
 
- drop policy if exists "authenticated_delete_portal_images" on storage.objects;
-create policy "authenticated_delete_portal_images"
-on storage.objects for delete
-to authenticated
-using (bucket_id = 'portal-images');
+-- STORAGE
+DROP POLICY IF EXISTS "public_read_portal_images" ON storage.objects;
+CREATE POLICY "public_read_portal_images" ON storage.objects
+FOR SELECT TO anon, authenticated USING (bucket_id = 'portal-images');
+
+DROP POLICY IF EXISTS "authenticated_upload_portal_images" ON storage.objects;
+CREATE POLICY "authenticated_upload_portal_images" ON storage.objects
+FOR INSERT TO authenticated WITH CHECK (bucket_id = 'portal-images');
+
+DROP POLICY IF EXISTS "authenticated_update_portal_images" ON storage.objects;
+CREATE POLICY "authenticated_update_portal_images" ON storage.objects
+FOR UPDATE TO authenticated
+USING (bucket_id = 'portal-images')
+WITH CHECK (bucket_id = 'portal-images');
+
+DROP POLICY IF EXISTS "authenticated_delete_portal_images" ON storage.objects;
+CREATE POLICY "authenticated_delete_portal_images" ON storage.objects
+FOR DELETE TO authenticated USING (bucket_id = 'portal-images');
