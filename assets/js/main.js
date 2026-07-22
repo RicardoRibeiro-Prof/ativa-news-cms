@@ -7,123 +7,36 @@ const bottomAd=document.getElementById('bottomAd');
 document.querySelector('a[href="admin/login.html"]')?.remove();
 
 const whatsappButton=[...document.querySelectorAll('.actions a')].find(link=>link.textContent.trim().toLowerCase()==='whatsapp');
-if(whatsappButton){
-  whatsappButton.href='https://wa.me/5589981311034?text=Ol%C3%A1%2C%20vim%20pelo%20Portal%20Serra%20Atual.';
-  whatsappButton.target='_blank';
-  whatsappButton.rel='noopener noreferrer';
-  whatsappButton.classList.add('whatsapp-button');
-  whatsappButton.setAttribute('aria-label','Falar pelo WhatsApp');
-}
+if(whatsappButton){whatsappButton.href='https://wa.me/5589981311034?text=Ol%C3%A1%2C%20vim%20pelo%20Portal%20Serra%20Atual.';whatsappButton.target='_blank';whatsappButton.rel='noopener noreferrer';whatsappButton.classList.add('whatsapp-button');whatsappButton.setAttribute('aria-label','Falar pelo WhatsApp')}
 
 const FALLBACK_IMAGE='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"><rect width="800" height="450" fill="#ececea"/><text x="400" y="225" text-anchor="middle" font-family="Arial" font-size="32" font-weight="700" fill="#777">PORTAL SERRA ATUAL</text></svg>`);
-let heroTimer=null;
-let breakingTimer=null;
+let heroTimer=null,breakingTimer=null;
 const safe=(value='')=>{const div=document.createElement('div');div.textContent=value;return div.innerHTML};
 const imageOf=item=>item.cover_image_url||item.image_url||FALLBACK_IMAGE;
 const categoryOf=item=>item.category?.name||'Notícias';
 const linkFor=item=>`noticia.html?slug=${encodeURIComponent(item.slug||item.id)}`;
 function formatDate(value){if(!value)return'';return new Intl.DateTimeFormat('pt-BR',{dateStyle:'short',timeStyle:'short'}).format(new Date(value))}
 function applyImageFallbacks(root=document){root.querySelectorAll('img').forEach(img=>{if(img.dataset.fallbackReady)return;img.dataset.fallbackReady='1';img.addEventListener('error',()=>{if(img.src!==FALLBACK_IMAGE)img.src=FALLBACK_IMAGE})})}
+function setupBreakingStyle(){if(document.getElementById('breakingTickerStyle'))return;const style=document.createElement('style');style.id='breakingTickerStyle';style.textContent=`.breaking .wrap{overflow:hidden}.breaking-ticker{position:relative;display:block;flex:1;min-width:0;height:38px;color:#fff}.breaking-ticker-item{position:absolute;inset:0;display:flex;align-items:center;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transform:translateY(100%);transition:opacity .45s ease,transform .45s ease}.breaking-ticker-item.active{opacity:1;transform:translateY(0)}.breaking-ticker-item.leaving{opacity:0;transform:translateY(-100%)}@media(max-width:620px){.breaking-ticker{height:32px}.breaking-ticker-item{font-size:12px}}`;document.head.appendChild(style)}
 
-function setupBreakingStyle(){
-  if(document.getElementById('breakingTickerStyle'))return;
-  const style=document.createElement('style');
-  style.id='breakingTickerStyle';
-  style.textContent=`.breaking .wrap{overflow:hidden}.breaking-ticker{position:relative;display:block;flex:1;min-width:0;height:38px;color:#fff}.breaking-ticker-item{position:absolute;inset:0;display:flex;align-items:center;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;opacity:0;transform:translateY(100%);transition:opacity .45s ease,transform .45s ease}.breaking-ticker-item.active{opacity:1;transform:translateY(0)}.breaking-ticker-item.leaving{opacity:0;transform:translateY(-100%)}@media(max-width:620px){.breaking-ticker{height:32px}.breaking-ticker-item{font-size:12px}}`;
-  document.head.appendChild(style);
-}
-
-function clearDemoContent(){
-  const hero=document.querySelector('.hero');
-  if(hero)hero.innerHTML='<div class="empty-portal">Nenhuma notícia publicada ainda.</div>';
-  const list=document.querySelector('.news-list');
-  if(list)list.innerHTML='<div class="empty-portal">As notícias publicadas aparecerão aqui.</div>';
-  const mostRead=document.querySelector('.most-read ol');
-  if(mostRead)mostRead.innerHTML='<li>Nenhuma notícia disponível.</li>';
-  const breaking=document.querySelector('.breaking span');
-  if(breaking)breaking.textContent='Portal Serra Atual';
-  document.querySelector('#tecnologia')?.remove();
-  document.querySelector('.sponsored')?.remove();
-}
-
-function startHeroCarousel(root){
-  const slides=[...root.querySelectorAll('.hero-slide')],dots=[...root.querySelectorAll('.hero-dot')];
-  if(slides.length<2)return;
-  let current=0;
-  const show=index=>{current=(index+slides.length)%slides.length;slides.forEach((slide,i)=>slide.classList.toggle('active',i===current));dots.forEach((dot,i)=>dot.classList.toggle('active',i===current))};
-  const restart=()=>{clearInterval(heroTimer);heroTimer=setInterval(()=>show(current+1),6000)};
-  root.querySelector('.hero-prev')?.addEventListener('click',e=>{e.preventDefault();show(current-1);restart()});
-  root.querySelector('.hero-next')?.addEventListener('click',e=>{e.preventDefault();show(current+1);restart()});
-  dots.forEach((dot,index)=>dot.addEventListener('click',e=>{e.preventDefault();show(index);restart()}));
-  root.addEventListener('mouseenter',()=>clearInterval(heroTimer));
-  root.addEventListener('mouseleave',restart);
-  show(0);restart();
-}
-
-function renderHero(heroItems,sideItems){
-  const hero=document.querySelector('.hero');
-  if(!hero)return;
-  if(!heroItems.length){hero.innerHTML='<div class="empty-portal">Nenhuma notícia publicada ainda.</div>';return}
-  const slides=heroItems.slice(0,5);
-  const sides=sideItems.slice(0,2);
-  hero.innerHTML=`<div class="hero-carousel">${slides.map((item,index)=>`<a class="hero-main hero-slide news-card${index===0?' active':''}" href="${linkFor(item)}"><img src="${safe(imageOf(item))}" alt="${safe(item.title)}"><div class="shade"></div><div class="hero-text"><span class="tag">${safe(categoryOf(item))}</span><h1>${safe(item.title)}</h1><p>${safe(item.subtitle||'')}</p></div></a>`).join('')}${slides.length>1?`<button class="hero-arrow hero-prev" type="button">‹</button><button class="hero-arrow hero-next" type="button">›</button><div class="hero-dots">${slides.map((_,i)=>`<button class="hero-dot${i===0?' active':''}" type="button"></button>`).join('')}</div>`:''}</div><div class="hero-side">${sides.map(item=>`<a class="side news-card" href="${linkFor(item)}"><img src="${safe(imageOf(item))}" alt="${safe(item.title)}"><div class="shade"></div><div class="side-text"><span class="tag">${safe(categoryOf(item))}</span><h2>${safe(item.title)}</h2></div></a>`).join('')}</div>`;
-  if(!sides.length)hero.querySelector('.hero-side')?.remove();
-  applyImageFallbacks(hero);
-  const carousel=hero.querySelector('.hero-carousel');
-  if(carousel)startHeroCarousel(carousel);
-}
-
-function renderLatest(items){
-  const list=document.querySelector('.news-list');
-  if(!list)return;
-  if(!items.length){list.innerHTML='<div class="empty-portal">Ainda não há notícias nesta seção.</div>';return}
-  list.innerHTML=items.map((item,index)=>`<a class="list-card news-card" href="${linkFor(item)}"><img src="${safe(imageOf(item))}" alt="${safe(item.title)}"><div><span class="tag">${safe(categoryOf(item))}</span><h3>${safe(item.title)}</h3><p>${safe(item.subtitle||item.meta_description||'')}</p><small>${safe(formatDate(item.published_at||item.created_at))}</small></div></a>${index===3?'<section class="ad in-feed"><small>PUBLICIDADE</small><strong>Banner responsivo dentro do feed</strong><span>970 × 90 px / 320 × 100 px</span></section>':''}`).join('');
-  applyImageFallbacks(list);
-}
-
+function clearDemoContent(){const hero=document.querySelector('.hero');if(hero)hero.innerHTML='<div class="empty-portal">Nenhuma notícia publicada ainda.</div>';const list=document.querySelector('.news-list');if(list)list.innerHTML='<div class="empty-portal">As notícias publicadas aparecerão aqui.</div>';const mostRead=document.querySelector('.most-read ol');if(mostRead)mostRead.innerHTML='<li>Nenhuma notícia disponível.</li>';const breaking=document.querySelector('.breaking span');if(breaking)breaking.textContent='Portal Serra Atual';document.querySelector('#tecnologia')?.remove();document.querySelector('.sponsored')?.remove()}
+function startHeroCarousel(root){const slides=[...root.querySelectorAll('.hero-slide')],dots=[...root.querySelectorAll('.hero-dot')];if(slides.length<2)return;let current=0;const show=index=>{current=(index+slides.length)%slides.length;slides.forEach((slide,i)=>slide.classList.toggle('active',i===current));dots.forEach((dot,i)=>dot.classList.toggle('active',i===current))};const restart=()=>{clearInterval(heroTimer);heroTimer=setInterval(()=>show(current+1),6000)};root.querySelector('.hero-prev')?.addEventListener('click',e=>{e.preventDefault();show(current-1);restart()});root.querySelector('.hero-next')?.addEventListener('click',e=>{e.preventDefault();show(current+1);restart()});dots.forEach((dot,index)=>dot.addEventListener('click',e=>{e.preventDefault();show(index);restart()}));root.addEventListener('mouseenter',()=>clearInterval(heroTimer));root.addEventListener('mouseleave',restart);show(0);restart()}
+function renderHero(heroItems,sideItems){const hero=document.querySelector('.hero');if(!hero)return;if(!heroItems.length){hero.innerHTML='<div class="empty-portal">Nenhuma notícia publicada ainda.</div>';return}const slides=heroItems.slice(0,5),sides=sideItems.slice(0,2);hero.innerHTML=`<div class="hero-carousel">${slides.map((item,index)=>`<a class="hero-main hero-slide news-card${index===0?' active':''}" href="${linkFor(item)}"><img src="${safe(imageOf(item))}" alt="${safe(item.title)}"><div class="shade"></div><div class="hero-text"><span class="tag">${safe(categoryOf(item))}</span><h1>${safe(item.title)}</h1><p>${safe(item.subtitle||'')}</p></div></a>`).join('')}${slides.length>1?`<button class="hero-arrow hero-prev" type="button">‹</button><button class="hero-arrow hero-next" type="button">›</button><div class="hero-dots">${slides.map((_,i)=>`<button class="hero-dot${i===0?' active':''}" type="button"></button>`).join('')}</div>`:''}</div><div class="hero-side">${sides.map(item=>`<a class="side news-card" href="${linkFor(item)}"><img src="${safe(imageOf(item))}" alt="${safe(item.title)}"><div class="shade"></div><div class="side-text"><span class="tag">${safe(categoryOf(item))}</span><h2>${safe(item.title)}</h2></div></a>`).join('')}</div>`;if(!sides.length)hero.querySelector('.hero-side')?.remove();applyImageFallbacks(hero);const carousel=hero.querySelector('.hero-carousel');if(carousel)startHeroCarousel(carousel)}
+function renderLatest(items){const list=document.querySelector('.news-list');if(!list)return;if(!items.length){list.innerHTML='<div class="empty-portal">Ainda não há notícias nesta seção.</div>';return}list.innerHTML=items.map((item,index)=>`<a class="list-card news-card" href="${linkFor(item)}"><img src="${safe(imageOf(item))}" alt="${safe(item.title)}"><div><span class="tag">${safe(categoryOf(item))}</span><h3>${safe(item.title)}</h3><p>${safe(item.subtitle||item.meta_description||'')}</p><small>${safe(formatDate(item.published_at||item.created_at))}</small></div></a>${index===3?'<section class="ad in-feed"><small>PUBLICIDADE</small><strong>Banner responsivo dentro do feed</strong><span>970 × 90 px / 320 × 100 px</span></section>':''}`).join('');applyImageFallbacks(list)}
 function renderMostRead(items){const list=document.querySelector('.most-read ol');if(list)list.innerHTML=items.length?items.slice(0,4).map(item=>`<li><a href="${linkFor(item)}">${safe(item.title)}</a></li>`).join(''):'<li>Nenhuma notícia disponível.</li>'}
-function renderBreaking(items){
-  const wrap=document.querySelector('.breaking .wrap');
-  if(!wrap)return;
-  setupBreakingStyle();
-  clearInterval(breakingTimer);
-  const news=items.slice(0,10);
-  if(!news.length){wrap.innerHTML='<strong>AGORA</strong><span>Portal Serra Atual</span>';return}
-  wrap.innerHTML=`<strong>AGORA</strong><div class="breaking-ticker">${news.map((item,index)=>`<a class="breaking-ticker-item${index===0?' active':''}" href="${linkFor(item)}">${safe(item.title)}</a>`).join('')}</div>`;
-  if(news.length===1)return;
-  let current=0;
-  breakingTimer=setInterval(()=>{
-    const links=[...wrap.querySelectorAll('.breaking-ticker-item')];
-    links[current].classList.remove('active');links[current].classList.add('leaving');
-    current=(current+1)%links.length;
-    links[current].classList.remove('leaving');links[current].classList.add('active');
-    setTimeout(()=>links.forEach((link,index)=>{if(index!==current)link.classList.remove('leaving')}),500);
-  },4500);
-}
+function renderBreaking(items){const wrap=document.querySelector('.breaking .wrap');if(!wrap)return;setupBreakingStyle();clearInterval(breakingTimer);const news=items.slice(0,10);if(!news.length){wrap.innerHTML='<strong>AGORA</strong><span>Portal Serra Atual</span>';return}wrap.innerHTML=`<strong>AGORA</strong><div class="breaking-ticker">${news.map((item,index)=>`<a class="breaking-ticker-item${index===0?' active':''}" href="${linkFor(item)}">${safe(item.title)}</a>`).join('')}</div>`;if(news.length===1)return;let current=0;breakingTimer=setInterval(()=>{const links=[...wrap.querySelectorAll('.breaking-ticker-item')];links[current].classList.remove('active');links[current].classList.add('leaving');current=(current+1)%links.length;links[current].classList.remove('leaving');links[current].classList.add('active');setTimeout(()=>links.forEach((link,index)=>{if(index!==current)link.classList.remove('leaving')}),500)},4500)}
+
 function normalizeCampaign(item){return{...item,target_url:item.target_url||item.link_url||null,starts_at:item.starts_at||item.start_date||null,ends_at:item.ends_at||item.end_date||null}}
 function campaignIsValid(item){const now=Date.now(),starts=item.starts_at?new Date(item.starts_at).getTime():null,ends=item.ends_at?new Date(item.ends_at).getTime():null;return item.status==='active'&&(!starts||starts<=now)&&(!ends||ends>=now)}
-function renderTopCampaign(item){const slot=document.getElementById('topBanner');if(!slot||!item?.desktop_image_url)return;const href=item.target_url||'#',mobile=item.mobile_image_url||item.desktop_image_url;slot.classList.add('real-ad');slot.innerHTML=`<a href="${safe(href)}" ${item.target_url?'target="_blank" rel="noopener"':''}><picture><source media="(max-width:620px)" srcset="${safe(mobile)}"><img src="${safe(item.desktop_image_url)}" alt="${safe(item.name||'Publicidade')}"></picture></a>`}
-async function loadCampaigns(){const{data,error}=await supabase.from('ad_campaigns').select('*').eq('status','active').order('created_at',{ascending:false});if(error)return console.warn(error.message);const campaigns=(data||[]).map(normalizeCampaign).filter(campaignIsValid);const top=campaigns.find(item=>['top_banner','Banner superior 970 × 250','Banner superior 970 x 250'].includes(item.position));if(top)renderTopCampaign(top);applyImageFallbacks()}
+const CAMPAIGN_SLOTS={top_banner:'#topBanner',header_strip:'.top-strip',half_left:'.ad-duo .mini-ad:nth-child(1)',half_right:'.ad-duo .mini-ad:nth-child(2)',sidebar_small:'.sidebar-small',sidebar_square:'.square',sidebar_tall:'.tall',in_feed:'.in-feed',technology:'.mid-strip',footer:'.footer-ad',bottom_fixed:'#bottomAd'};
+function renderCampaign(item){const selector=CAMPAIGN_SLOTS[item.position];const slot=selector?document.querySelector(selector):null;if(!slot||!item.desktop_image_url){console.warn('Posição de campanha não encontrada:',item.position);return false}const mobile=item.mobile_image_url||item.desktop_image_url;const banner=`<a href="${safe(item.target_url||'#')}" ${item.target_url?'target="_blank" rel="noopener noreferrer"':''}><picture><source media="(max-width:620px)" srcset="${safe(mobile)}"><img src="${safe(item.desktop_image_url)}" alt="${safe(item.name||'Publicidade')}"></picture></a>`;slot.classList.add('real-ad','campaign-loaded');slot.style.display='block';if(item.position==='bottom_fixed'){slot.innerHTML=`${banner}<button type="button" aria-label="Fechar anúncio">×</button>`;slot.querySelector('button')?.addEventListener('click',()=>slot.remove())}else slot.innerHTML=banner;return true}
+async function loadCampaigns(){const{data,error}=await supabase.from('ad_campaigns').select('*').eq('status','active').order('created_at',{ascending:false});if(error){console.warn('Campanhas não carregadas:',error.message);return}const campaigns=(data||[]).map(normalizeCampaign).filter(campaignIsValid);campaigns.forEach(renderCampaign);applyImageFallbacks()}
 async function loadAdvertisers(){const{data,error}=await supabase.from('advertisers').select('id,name,website,logo_url,is_active').eq('is_active',true).order('created_at',{ascending:false});if(error)return console.warn('Parceiros não carregados:',error.message);const items=(data||[]).filter(item=>item.logo_url);const track=document.querySelector('.logo-track');if(!track)return;if(!items.length){track.innerHTML='<div class="logo-card">Nenhum parceiro cadastrado</div>';return}track.innerHTML=[...items,...items].map(item=>`<a class="logo-card" href="${safe(item.website||'#')}" ${item.website?'target="_blank" rel="noopener"':''}><img src="${safe(item.logo_url)}" alt="${safe(item.name||'Parceiro')}" style="max-width:150px;max-height:70px;object-fit:contain"></a>`).join('');applyImageFallbacks(track)}
-
-async function loadNews(){
-  const{data,error}=await supabase.from('news').select('id,slug,title,subtitle,meta_description,cover_image_url,image_url,created_at,published_at,is_breaking,category:categories(name)').eq('status','published').order('published_at',{ascending:false}).order('created_at',{ascending:false}).limit(60);
-  if(error){console.warn('Não foi possível carregar as notícias:',error.message);return}
-  const items=data||[];
-  const hero=items.slice(0,5);
-  const side=items.slice(5,7);
-  const latest=items.slice(7);
-  renderHero(hero,side);
-  renderLatest(latest);
-  renderMostRead(items);
-  renderBreaking(items);
-  applyImageFallbacks();
-}
+async function loadNews(){const{data,error}=await supabase.from('news').select('id,slug,title,subtitle,meta_description,cover_image_url,image_url,created_at,published_at,is_breaking,category:categories(name)').eq('status','published').order('published_at',{ascending:false}).order('created_at',{ascending:false}).limit(60);if(error){console.warn('Não foi possível carregar as notícias:',error.message);return}const items=data||[];renderHero(items.slice(0,5),items.slice(5,7));renderLatest(items.slice(7));renderMostRead(items);renderBreaking(items);applyImageFallbacks()}
 
 clearDemoContent();
 toggle?.addEventListener('click',()=>{panel.classList.toggle('open');if(panel.classList.contains('open'))input.focus()});
 input?.addEventListener('input',event=>{const query=event.target.value.toLowerCase().trim();document.querySelectorAll('.news-card').forEach(card=>{const text=`${card.dataset.search||''} ${card.innerText}`.toLowerCase();card.style.display=query&&!text.includes(query)?'none':''})});
 document.querySelectorAll('[data-category]').forEach(link=>{link.href=`categoria.html?slug=${encodeURIComponent(link.dataset.category)}`});
-document.querySelector('#bottomAd button')?.addEventListener('click',()=>bottomAd?.remove());
 applyImageFallbacks();
-Promise.allSettled([loadNews(),loadCampaigns(),loadAdvertisers()]);
+(async()=>{await loadNews();await Promise.allSettled([loadCampaigns(),loadAdvertisers()])})();
