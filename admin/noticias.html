@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Notícias | Portal Serra Atual</title>
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body data-page="news-list">
+  <div class="admin-shell">
+    <aside class="sidebar">
+      <a class="brand" href="./dashboard.html"><span>Serra</span> Atual</a>
+      <nav class="sidebar-nav">
+        <a href="./dashboard.html">Dashboard</a>
+        <a class="active" href="./noticias.html">Notícias</a>
+        <a href="./campanhas.html">Campanhas</a>
+        <a href="./anunciantes.html">Anunciantes</a>
+      </nav>
+      <a class="sidebar-footer" href="../index.html">Ver portal</a>
+    </aside>
+
+    <main class="admin-main">
+      <header class="admin-header">
+        <div>
+          <span class="eyebrow">Conteúdo</span>
+          <h1>Notícias</h1>
+        </div>
+        <a class="button" href="./noticia-form.html">Nova notícia</a>
+      </header>
+
+      <section class="panel">
+        <div class="toolbar">
+          <input id="searchNews" class="control" type="search" placeholder="Pesquisar pelo título">
+          <select id="statusFilter" class="control">
+            <option value="">Todos os status</option>
+            <option value="published">Publicadas</option>
+            <option value="draft">Rascunhos</option>
+            <option value="scheduled">Agendadas</option>
+          </select>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Notícia</th>
+                <th>Categoria</th>
+                <th>Status</th>
+                <th>Marcação</th>
+                <th>Data</th>
+                <th>Ações</th>
+              </tr>
+            </thead>
+            <tbody id="newsTableBody">
+              <tr><td colspan="6" class="empty-state">Carregando...</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script type="module" src="../assets/js/news-admin.js"></script>
+</body>
+</html>
