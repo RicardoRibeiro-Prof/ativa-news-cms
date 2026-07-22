@@ -14,6 +14,7 @@
       <nav class="sidebar-nav">
         <a href="./dashboard.html">Dashboard</a>
         <a class="active" href="./noticias.html">Notícias</a>
+        <a href="./categorias.html">Categorias</a>
         <a href="./campanhas.html">Campanhas</a>
         <a href="./anunciantes.html">Anunciantes</a>
       </nav>
@@ -22,73 +23,44 @@
 
     <main class="admin-main">
       <header class="admin-header">
-        <div>
-          <span class="eyebrow">Conteúdo</span>
-          <h1 id="pageTitle">Nova notícia</h1>
-        </div>
+        <div><span class="eyebrow">Conteúdo</span><h1 id="pageTitle">Nova notícia</h1></div>
         <a class="button button-secondary" href="./noticias.html">Voltar</a>
       </header>
 
       <form id="newsForm" class="form-layout">
         <section class="panel form-main">
+          <div class="field"><label for="title">Título</label><input id="title" class="control" type="text" maxlength="180" required></div>
+          <div class="field"><label for="slug">Endereço amigável</label><input id="slug" class="control" type="text" required></div>
+          <div class="field"><label for="subtitle">Subtítulo</label><textarea id="subtitle" class="control" rows="3"></textarea></div>
+
           <div class="field">
-            <label for="title">Título</label>
-            <input id="title" class="control" type="text" maxlength="180" required>
+            <label for="coverImage">Imagem de capa</label>
+            <label class="upload-box" for="coverImage">
+              <strong>Selecionar imagem</strong>
+              <span>JPG, PNG ou WEBP</span>
+            </label>
+            <input id="coverImage" type="file" accept="image/jpeg,image/png,image/webp" hidden>
+            <input id="coverImageUrl" type="hidden">
+            <img id="imagePreview" class="image-preview" alt="Prévia da imagem de capa">
           </div>
-          <div class="field">
-            <label for="slug">Endereço amigável</label>
-            <input id="slug" class="control" type="text" required>
-          </div>
-          <div class="field">
-            <label for="subtitle">Subtítulo</label>
-            <textarea id="subtitle" class="control" rows="3"></textarea>
-          </div>
-          <div class="field">
-            <label for="content">Conteúdo</label>
-            <textarea id="content" class="control editor-field" rows="20" required></textarea>
-          </div>
-          <div class="field">
-            <label for="metaDescription">Descrição para Google e redes sociais</label>
-            <textarea id="metaDescription" class="control" rows="3" maxlength="300"></textarea>
-          </div>
+
+          <div class="field"><label for="content">Conteúdo</label><textarea id="content" class="control editor-field" rows="20" required></textarea></div>
+          <div class="field"><label for="metaDescription">Descrição para Google e redes sociais</label><textarea id="metaDescription" class="control" rows="3" maxlength="300"></textarea></div>
         </section>
 
         <aside class="form-sidebar">
           <section class="panel">
             <h2>Publicação</h2>
-            <div class="field">
-              <label for="status">Status</label>
-              <select id="status" class="control">
-                <option value="draft">Rascunho</option>
-                <option value="published">Publicada</option>
-                <option value="scheduled">Agendada</option>
-              </select>
-            </div>
-            <div class="field">
-              <label for="publishedAt">Data de publicação</label>
-              <input id="publishedAt" class="control" type="datetime-local">
-            </div>
+            <div class="field"><label for="status">Status</label><select id="status" class="control"><option value="draft">Rascunho</option><option value="published">Publicada</option><option value="scheduled">Agendada</option></select></div>
+            <div class="field"><label for="publishedAt">Data de publicação</label><input id="publishedAt" class="control" type="datetime-local"></div>
             <label class="check-row"><input id="isFeatured" type="checkbox"> Exibir como destaque</label>
             <label class="check-row"><input id="isBreaking" type="checkbox"> Marcar como urgente</label>
           </section>
 
           <section class="panel">
             <h2>Organização</h2>
-            <div class="field">
-              <label for="categoryId">Categoria</label>
-              <select id="categoryId" class="control"></select>
-            </div>
-            <div class="field">
-              <label for="authorId">Autor</label>
-              <select id="authorId" class="control"></select>
-            </div>
-          </section>
-
-          <section class="panel">
-            <h2>Imagem de capa</h2>
-            <input id="coverImage" class="control" type="file" accept="image/jpeg,image/png,image/webp">
-            <input id="coverImageUrl" type="hidden">
-            <img id="imagePreview" class="image-preview" alt="Prévia da imagem">
+            <div class="field"><label for="categoryId">Categoria</label><select id="categoryId" class="control"></select></div>
+            <div class="field"><label for="authorId">Autor</label><select id="authorId" class="control"></select></div>
           </section>
 
           <button id="saveButton" class="button button-block" type="submit">Salvar notícia</button>
@@ -97,7 +69,6 @@
       </form>
     </main>
   </div>
-
   <script type="module" src="../assets/js/news-admin.js"></script>
 </body>
 </html>
