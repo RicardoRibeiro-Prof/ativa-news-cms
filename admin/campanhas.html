@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Campanhas | Portal Serra Atual</title>
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body data-entity="ad_campaigns">
+  <div class="admin-shell">
+    <aside class="sidebar">
+      <h2>Serra Atual</h2>
+      <nav aria-label="Menu administrativo">
+        <a href="./dashboard.html">Dashboard</a>
+        <a href="./noticias.html">Notícias</a>
+        <a href="./categorias.html">Categorias</a>
+        <a class="active" href="./campanhas.html">Campanhas</a>
+        <a href="./anunciantes.html">Anunciantes</a>
+        <a href="../index.html">Ver portal</a>
+      </nav>
+    </aside>
+    <main class="admin-main">
+      <header class="admin-header"><div><h1>Campanhas</h1><p>Gerencie os anúncios exibidos no portal.</p></div></header>
+      <section class="panel" style="padding:22px">
+        <form id="entityForm" class="entity-form">
+          <div class="form-group"><label for="name">Nome da campanha</label><input id="name" required placeholder="Campanha Julho"></div>
+          <div class="form-group"><label for="position">Posição</label><input id="position" required placeholder="Banner superior"></div>
+          <div class="form-group"><label for="status">Status</label><select id="status"><option value="active">Ativa</option><option value="draft">Rascunho</option><option value="paused">Pausada</option></select></div>
+          <button class="primary-button" style="width:auto" type="submit">Adicionar campanha</button>
+          <p id="entityMessage" class="form-message"></p>
+        </form>
+      </section>
+      <section class="panel"><div class="panel-header"><h2>Campanhas cadastradas</h2></div><div class="table-wrap"><table><thead><tr><th>Nome</th><th>Posição</th><th>Status</th><th>Ações</th></tr></thead><tbody id="entityBody"><tr><td colspan="4" class="empty-state">Carregando...</td></tr></tbody></table></div></section>
+    </main>
+  </div>
+  <script type="module" src="../assets/js/entities-admin.js"></script>
+</body>
+</html>
