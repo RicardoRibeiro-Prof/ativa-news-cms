@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0d0f12">
+  <title>Login | Portal Serra Atual</title>
+  <link rel="stylesheet" href="../assets/css/admin.css">
+</head>
+<body class="login-page">
+  <main class="login-card">
+    <div class="brand-mark">SA</div>
+    <h1>Portal Serra Atual</h1>
+    <p>Acesse o painel administrativo para gerenciar notícias e campanhas.</p>
+
+    <form id="loginForm" novalidate>
+      <div class="form-group">
+        <label for="email">E-mail</label>
+        <input id="email" name="email" type="email" autocomplete="email" required>
+      </div>
+
+      <div class="form-group">
+        <label for="password">Senha</label>
+        <input id="password" name="password" type="password" autocomplete="current-password" minlength="6" required>
+      </div>
+
+      <button id="loginButton" class="primary-button" type="submit">Entrar</button>
+      <p id="message" class="form-message" role="alert" aria-live="polite"></p>
+    </form>
+  </main>
+
+  <script type="module">
+    import { getSession, signIn } from '../supabase/auth.js';
+
+    const form = document.querySelector('#loginForm');
+    const button = document.querySelector('#loginButton');
+    const message = document.querySelector('#message');
+
+    const session = await getSession();
+    if (session) window.location.replace('./dashboard.html');
+
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      message.textContent = '';
+
+      if (!form.reportValidity()) return;
+
+      button.disabled = true;
+      button.textContent = 'Entrando...';
+
+      try {
+        const email = form.email.value.trim();
+        const password = form.password.value;
+        await signIn(email, password);
+        window.location.replace('./dashboard.html');
+      } catch (error) {
+        message.textContent = error?.message || 'Não foi possível entrar. Confira seus dados.';
+      } finally {
+        button.disabled = false;
+        button.textContent = 'Entrar';
+      }
+    });
+  </script>
+</body>
+</html>
