@@ -5,6 +5,8 @@ const panel=document.getElementById('searchPanel');
 const input=document.getElementById('newsSearch');
 const bottomAd=document.getElementById('bottomAd');
 document.querySelector('a[href="admin/login.html"]')?.remove();
+const whatsappButton=[...document.querySelectorAll('.actions a')].find(link=>link.textContent.trim().toLowerCase()==='whatsapp');
+if(whatsappButton){whatsappButton.href='https://wa.me/5589981311034?text=Olá%2C%20vim%20pelo%20Portal%20Serra%20Atual.';whatsappButton.target='_blank';whatsappButton.rel='noopener noreferrer';whatsappButton.classList.add('whatsapp-button');whatsappButton.setAttribute('aria-label','Falar pelo WhatsApp')}
 const FALLBACK_IMAGE='data:image/svg+xml;charset=UTF-8,'+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 450"><rect width="800" height="450" fill="#ececea"/><text x="400" y="225" text-anchor="middle" font-family="Arial" font-size="32" font-weight="700" fill="#777">PORTAL SERRA ATUAL</text></svg>`);
 let heroTimer=null;
 const safe=(value='')=>{const div=document.createElement('div');div.textContent=value;return div.innerHTML};
