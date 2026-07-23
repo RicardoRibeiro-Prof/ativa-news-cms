@@ -1,7 +1,22 @@
-.campaign-slot-empty{display:none!important}
+.campaign-slot-empty{display:block!important}
+.ad-placeholder{display:flex!important;align-items:center;justify-content:center;flex-direction:column;text-align:center;gap:4px;background:#f3f3f3;border:1px dashed #b8b8b8;color:#555;overflow:hidden}
+.ad-placeholder small{font-size:10px;font-weight:800;letter-spacing:.16em;color:#c81920}
+.ad-placeholder strong{font-size:16px;color:#222}
+.ad-placeholder span{font-size:12px;color:#777}
+.top-strip.ad-placeholder{min-height:90px}
+#topBanner.ad-placeholder{min-height:250px;margin-top:18px;margin-bottom:18px;border-radius:12px}
+.ad-duo{display:grid!important;grid-template-columns:1fr 1fr;gap:18px;margin-top:18px;margin-bottom:18px}
+.ad-duo .ad-placeholder{min-height:120px;border-radius:12px}
+.sidebar-small.ad-placeholder{min-height:100px;border-radius:12px}
+.square.ad-placeholder{min-height:250px;border-radius:12px}
+.tall.ad-placeholder{min-height:600px;border-radius:12px}
+.mid-strip.ad-placeholder{min-height:180px;margin-top:28px;margin-bottom:28px}
+.footer-ad.ad-placeholder{min-height:90px;margin-bottom:28px;border-radius:12px}
+.bottom-ad.ad-placeholder{min-height:70px;padding:10px 70px 10px 18px}
 .real-ad{display:block!important;width:100%;overflow:hidden;border:0!important;background:#111!important;border-radius:12px!important}
 .real-ad>a,.real-ad picture{display:block;width:100%;height:100%}
 .real-ad img{display:block;width:100%!important;height:100%!important;object-fit:cover!important;object-position:center!important;border-radius:12px!important}
+.real-ad small,.real-ad strong,.real-ad span{display:none!important}
 .campaign-half_left,.campaign-half_right{height:120px!important;aspect-ratio:570/120}
 .campaign-top_banner{max-width:970px;height:auto!important;aspect-ratio:970/250}
 .campaign-header_strip{height:90px!important;aspect-ratio:1180/90}
@@ -15,18 +30,16 @@
 .campaign-bottom_fixed img{height:auto!important;max-height:120px;object-fit:cover!important}
 @media(max-width:900px){
   .ad-duo{grid-template-columns:1fr!important;gap:14px!important}
-  .campaign-half_left,.campaign-half_right,
-  .campaign-top_banner,.campaign-header_strip,.campaign-in_feed,.campaign-technology,.campaign-footer{
-    width:100%!important;height:100px!important;aspect-ratio:auto!important;margin:16px auto!important
-  }
-  .campaign-half_left img,.campaign-half_right img{object-position:center 22%!important}
+  #topBanner.ad-placeholder{min-height:100px}
+  .top-strip.ad-placeholder,.mid-strip.ad-placeholder,.footer-ad.ad-placeholder{min-height:100px}
+  .ad-duo .ad-placeholder{min-height:100px}
+  .campaign-half_left,.campaign-half_right,.campaign-top_banner,.campaign-header_strip,.campaign-in_feed,.campaign-technology,.campaign-footer{width:100%!important;height:100px!important;aspect-ratio:auto!important;margin:16px auto!important}
   .campaign-sidebar_small{width:min(100%,320px)!important;height:100px!important;aspect-ratio:auto!important;margin:16px auto!important}
   .campaign-sidebar_square{width:min(100%,300px)!important;height:250px!important;aspect-ratio:auto!important;margin:16px auto!important}
   .campaign-sidebar_tall{width:min(100%,300px)!important;height:600px!important;aspect-ratio:auto!important;margin:16px auto!important}
-  .content aside .campaign-loaded{margin:16px auto!important}
 }
 @media(max-width:620px){
   .ad-duo{width:calc(100% - 32px)!important;margin:18px auto!important}
+  .ad-placeholder strong{font-size:14px}
   .campaign-half_left,.campaign-half_right{height:100px!important;min-height:100px!important;max-height:100px!important}
-  .campaign-half_left img,.campaign-half_right img{object-fit:cover!important;object-position:center 20%!important}
 }
