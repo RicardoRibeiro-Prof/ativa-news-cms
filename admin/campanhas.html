@@ -16,7 +16,7 @@
       </nav>
     </aside>
     <main class="admin-main">
-      <header class="admin-header"><div><span class="eyebrow">Publicidade</span><h1>Campanhas</h1><p>Envie uma única arte. O sistema gera automaticamente as versões para computador e celular.</p></div></header>
+      <header class="admin-header"><div><span class="eyebrow">Publicidade</span><h1>Campanhas</h1><p>Envie uma única arte. O sistema gera as versões e publica um arquivo público consumido pelo portal.</p></div></header>
       <section class="panel" style="padding:22px">
         <form id="entityForm" class="form-layout" style="grid-template-columns:minmax(0,1fr) 360px">
           <div>
@@ -28,13 +28,13 @@
           </div>
           <aside class="form-sidebar">
             <section class="panel"><h2>Arte da campanha</h2><input id="campaignImage" class="control" type="file" accept="image/jpeg,image/png,image/webp" required><small>Envie uma imagem vertical, quadrada ou horizontal. O sistema cria os banners sem cortar informações importantes.</small><img id="campaignPreview" class="image-preview" alt="Prévia da arte"><div id="generatedPreview" style="display:grid;gap:10px;margin-top:12px"></div></section>
-            <button id="saveCampaignButton" class="button button-block" type="submit">Gerar e salvar campanha</button><p id="entityMessage" class="form-message" aria-live="polite"></p>
+            <button id="saveCampaignButton" class="button button-block" type="submit">Gerar e publicar campanha</button><p id="entityMessage" class="form-message" aria-live="polite"></p>
           </aside>
         </form>
       </section>
       <section class="panel"><div class="panel-header"><h2>Campanhas cadastradas</h2></div><div class="table-wrap"><table><thead><tr><th>Campanha</th><th>Posição</th><th>Status</th><th>Período</th><th>Ações</th></tr></thead><tbody id="entityBody"><tr><td colspan="5" class="empty-state">Carregando...</td></tr></tbody></table></div></section>
     </main>
   </div>
-  <script type="module" src="../assets/js/entities-admin.js?v=20260722-auto-banner"></script>
+  <script type="module" src="../assets/js/entities-admin.js?v=20260727-ads-final"></script>
 </body>
 </html>
